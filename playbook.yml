@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Install requirements.
+      apt:
+        state: present
+        name:
+          - git
+          - curl
+          - docker.io
+          - docker-compose
