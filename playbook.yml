@@ -9,5 +9,16 @@
         name:
           - git
           - curl
-          - docker.io
-          - docker-compose
+    - name: Create /etc/pihole directory.
+      file:
+        path: /etc/pihole
+        state: directory
+      tags: pihole
+    - name: Download pihole installer.
+      get_url:
+        url: https://install.pi-hole.net
+        dest: /tmp/install-pihole.sh
+        mode: 0740
+      tags: pihole
+      
+
