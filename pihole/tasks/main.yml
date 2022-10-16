@@ -5,6 +5,15 @@
         name:
           - git
           - curl
+          - ntp
+
+    - name: Ensure ntp is started and enabled.
+      service:
+        name: ntp
+        state: started
+        enabled: yes
+
+    
     - name: Update and upgrade apt packages
       become: true
       apt:
@@ -12,7 +21,7 @@
         update_cache: yes
         cache_valid_time: 86400 #One day
 
-        
+
     - name: Create Pihole group.
       group:
         name: pihole
