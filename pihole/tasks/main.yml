@@ -1,0 +1,43 @@
+
+    - name: Install requirements.
+      apt:
+        state: present
+        name:
+          - git
+          - curl
+    - name: Create Pihole group.
+      group:
+        name: pihole
+        state: present
+      become: yes
+      tags: pihole
+    - name: Create Pihole user.
+      user:
+        name: pihole
+        group: pihole
+        groups: pihole,www-data
+      become: yes
+      tags: pihole
+    - name: Create /etc/pihole directory.
+      file:
+        path: /etc/pihole
+        state: directory
+        owner: pihole
+        group: pihole
+      tags: pihole
+    - name: Copy pihole setupVars.conf into /etc/pihole.
+      template:
+        src: setupVars.conf
+        dest: /etc/pihole/setupVars.conf
+      become: yes
+      tags: phiole
+    - name: Download pihole installer.
+      get_url:
+        url: https://install.pi-hole.net
+        dest: /tmp/basic-install.sh
+        mode: 0740
+      tags: pihole
+    - name: Install Pi-hole.
+      shell: "/tmp/basic-install.sh --unattended"
+      become: yes
+      tags: pihole
