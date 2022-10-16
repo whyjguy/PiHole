@@ -1,0 +1,26 @@
+- name: Install Unbound
+  apt:
+    name: unbound
+  become: yes
+  tags: unbound
+
+- name: Download root-hints
+  get_url:
+    url: https://www.internic.net/domain/named.root
+    dest: /var/lib/unbound/root.hints
+  become: yes
+  tags: unbound
+
+- name: Adjust config.
+  template:
+    src: pi-hole.conf
+    dest: /etc/unbound/unbound.conf.d/pi-hole.conf
+  become: yes
+  tags: unbound
+
+- name: restart unbound.
+  service:
+    name: unbound
+    state: restarted
+  become: yes
+  tags: unbound
